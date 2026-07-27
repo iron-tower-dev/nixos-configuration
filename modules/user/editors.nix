@@ -35,13 +35,13 @@ in {
       rust-analyzer
       gopls
       omnisharp-roslyn
-      nodePackages.typescript-language-server
+      typescript-language-server
       elixir-ls
       gleam # includes gleam LSP
 
       # Formatters (standalone ones not bundled with language toolchains)
       csharpier
-      nodePackages.prettier
+      prettier
     ];
   };
 }
