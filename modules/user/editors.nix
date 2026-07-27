@@ -21,7 +21,7 @@ in {
     # Emacs 29+ with native Wayland support (Req 13.2)
     programs.emacs = {
       enable = true;
-      package = pkgs.emacs29-pgtk;
+      package = pkgs.emacs-pgtk;
     };
 
     # Config-source passthrough (Req 13.1, 13.2, 13.5)
