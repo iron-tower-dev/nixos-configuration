@@ -1,0 +1,15 @@
+# Nix build output
+result
+result-*
+
+# Emacs
+config/emacs/elpa/
+config/emacs/eln-cache/
+config/emacs/auto-save-list/
+config/emacs/.mc-lists.el
+
+# Neovim
+config/nvim/plugin/
+
+# Kiro specs (IDE-local)
+.kiro/

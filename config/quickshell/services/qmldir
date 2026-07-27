@@ -1,0 +1,14 @@
+module qs.services
+singleton Logger Logger.qml
+singleton Wallust Wallust.qml
+singleton Audio Audio.qml
+singleton Brightness Brightness.qml
+singleton Time Time.qml
+singleton Players Players.qml
+singleton Network Network.qml
+singleton Bluetooth Bluetooth.qml
+singleton Notifs Notifs.qml
+singleton SystemUsage SystemUsage.qml
+singleton IdleInhibitor IdleInhibitor.qml
+singleton Screenshot Screenshot.qml
+singleton PowerProfiles PowerProfiles.qml

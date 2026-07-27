@@ -1,0 +1,24 @@
+configuration {
+    font: "JetBrainsMono Nerd Font 13";
+    show-icons: true;
+    icon-theme: "Adwaita";
+    terminal: "ghostty";
+    drun-display-format: "{name}";
+    disable-history: false;
+    case-sensitive: false;
+    cycle: true;
+    hover-select: true;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+
+    timeout {
+        action: "kb-cancel";
+        delay: 0;
+    }
+    filebrowser {
+        directories-first: true;
+        sorting-method: "name";
+    }
+}
+
+@import "colors.rasi"

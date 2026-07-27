@@ -1,0 +1,8 @@
+[config]
+scheme = "scheme-tonal-spot"
+type = "scheme-content"
+contrast = 0.0
+
+[templates.colors-json]
+input_path = "~/.config/matugen/templates/colors.json"
+output_path = "~/.cache/theme/colors.json.tmp"

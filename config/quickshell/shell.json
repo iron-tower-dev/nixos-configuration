@@ -1,0 +1,23 @@
+{
+    "appearance": {
+        "fontFamily": "JetBrainsMono Nerd Font"
+    },
+    "paths": {
+        "wallustColors": "~/.cache/theme/colors.json"
+    },
+    "bar": {
+        "height": 42,
+        "workspaceCount": 9
+    },
+    "osd": {
+        "volumeTimeoutMs": 2000,
+        "brightnessTimeoutMs": 2000
+    },
+    "notifications": {
+        "popupWidth": 380,
+        "maxVisible": 5,
+        "timeoutMs": 5000,
+        "registerServer": true
+    },
+    "debug": false
+}

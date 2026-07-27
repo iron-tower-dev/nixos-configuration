@@ -1,0 +1,5 @@
+module qs.components
+StateLayer 1.0 StateLayer.qml
+Elevation 1.0 Elevation.qml
+IconButton 1.0 IconButton.qml
+StyledFlickable 1.0 StyledFlickable.qml
