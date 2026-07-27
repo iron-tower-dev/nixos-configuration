@@ -7,6 +7,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+    # Allow unfree packages (e.g., discord, steam)
+    nixpkgs.config.allowUnfree = true;
+
     # Enable flakes and nix-command experimental features
     nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
