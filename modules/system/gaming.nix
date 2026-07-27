@@ -23,8 +23,8 @@ in {
       lutris
       heroic
 
-      # ProtonGE-Custom for enhanced game compatibility
-      proton-ge-bin
+      # ProtonGE: install via ProtonUp-Qt or place in ~/.steam/root/compatibilitytools.d/
+      protonup-qt
     ];
 
     # Kernel tuning for gaming performance
