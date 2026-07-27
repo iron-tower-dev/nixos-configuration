@@ -21,6 +21,9 @@ in {
     # Nushell available as alternative shell (Req 11.2)
     programs.nushell = {
       enable = true;
+      # Use our custom config from config/nushell/ (Req 11.5)
+      configFile.source = lib.mkIf (builtins.pathExists (configDir + "/nushell/config.nu"))
+        (configDir + "/nushell/config.nu");
     };
 
     # Starship prompt for fish (Req 11.3)
@@ -48,9 +51,6 @@ in {
       source = configDir + "/zsh/.zshrc";
     };
 
-    # Nushell configuration from config/nushell/
-    xdg.configFile."nushell/config.nu" = lib.mkIf (builtins.pathExists (configDir + "/nushell/config.nu")) (lib.mkForce {
-      source = configDir + "/nushell/config.nu";
-    });
+    # Nushell configuration handled above via programs.nushell.configFile
   };
 }
