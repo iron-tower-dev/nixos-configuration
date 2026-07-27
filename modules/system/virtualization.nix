@@ -12,9 +12,7 @@ in {
       enable = true;
       qemu = {
         package = pkgs.qemu_kvm;
-        # Install OVMF for UEFI guest support (Req 22.5)
-        ovmf.enable = true;
-        ovmf.packages = [ pkgs.OVMFFull.fd ];
+        # OVMF images are now available by default with QEMU (Req 22.5)
         swtpm.enable = true;
       };
     };

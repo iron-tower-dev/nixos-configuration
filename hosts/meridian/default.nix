@@ -12,6 +12,9 @@
     shell = pkgs.fish;
   };
 
+  # Required when setting a user shell to fish
+  programs.fish.enable = true;
+
   # System modules
   custom.system = {
     boot.enable = true;
