@@ -17,7 +17,7 @@ in {
 
       extraPackages = with pkgs; [
         # VA-API hardware video acceleration
-        vaapiVdpau
+        libva-vdpau-driver
         libvdpau-va-gl
       ];
     };
