@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.custom.user.files;
-  configDir = ../../../config;
+  configDir = ../../config;
 in {
   options.custom.user.files = {
     enable = lib.mkEnableOption "file managers (Thunar, yazi)";

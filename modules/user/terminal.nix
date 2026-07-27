@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.custom.user.terminal;
-  configDir = ../../../config/alacritty;
+  configDir = ../../config/alacritty;
 
   gen-alacritty-colors = pkgs.writeShellScriptBin "gen-alacritty-colors" ''
     set -euo pipefail

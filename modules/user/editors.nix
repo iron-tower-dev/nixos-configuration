@@ -3,7 +3,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.custom.user.editors;
-  configDir = ../../../config;
+  configDir = ../../config;
 in {
   options.custom.user.editors = {
     enable = lib.mkEnableOption "editors (Neovim, Emacs) with LSPs and formatters";
