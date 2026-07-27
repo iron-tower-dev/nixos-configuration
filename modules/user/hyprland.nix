@@ -23,7 +23,7 @@ in {
       pkgs.brightnessctl
       pkgs.hypridle
       # Requires the hyprland flake input
-      inputs.hyprland.packages.x86_64-linux.hyprpolkitagent
+      pkgs.hyprpolkitagent
     ];
 
     xdg.configFile."hypr".source = configDir;
