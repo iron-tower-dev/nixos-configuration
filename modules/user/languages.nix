@@ -23,7 +23,7 @@ in {
       omnisharp-roslyn
 
       # Node.js LTS with npm and fnm version manager (Req 15.4)
-      nodejs_20
+      nodejs_22
       fnm
 
       # Elixir with Erlang/OTP and language server (Req 15.5)
