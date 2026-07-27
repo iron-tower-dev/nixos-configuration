@@ -15,7 +15,7 @@ in {
       message = "custom.user.rofi requires custom.user.hyprland to be enabled.";
     }];
 
-    home.packages = [ pkgs.rofi-wayland ];
+    home.packages = [ pkgs.rofi ];
     xdg.configFile."rofi".source = configDir;
   };
 }
