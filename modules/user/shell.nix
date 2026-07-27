@@ -49,8 +49,8 @@ in {
     };
 
     # Nushell configuration from config/nushell/
-    xdg.configFile."nushell/config.nu" = lib.mkIf (builtins.pathExists (configDir + "/nushell/config.nu")) {
+    xdg.configFile."nushell/config.nu" = lib.mkIf (builtins.pathExists (configDir + "/nushell/config.nu")) (lib.mkForce {
       source = configDir + "/nushell/config.nu";
-    };
+    });
   };
 }
