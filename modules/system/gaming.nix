@@ -48,8 +48,8 @@ in {
       }
     ];
 
-    # ACO shader compilation — RADV uses ACO by default, set RADV as the Vulkan ICD
-    environment.sessionVariables = {
+    # ACO shader compilation — RADV uses ACO by default, set RADV as the Vulkan ICD (AMD only)
+    environment.sessionVariables = lib.mkIf (config.custom.system.gpu.driver == "amd") {
       AMD_VULKAN_ICD = "RADV";
     };
   };
