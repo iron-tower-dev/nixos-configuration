@@ -14,7 +14,8 @@ in {
   config = lib.mkIf cfg.enable {
     wayland.windowManager.hyprland = {
       enable = true;
-      package = inputs.hyprland.packages.x86_64-linux.hyprland;
+      # Use nixpkgs package (cached binary) instead of flake (source build)
+      # package = inputs.hyprland.packages.x86_64-linux.hyprland;
     };
 
     home.packages = [

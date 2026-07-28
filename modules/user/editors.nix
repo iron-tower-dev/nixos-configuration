@@ -25,7 +25,9 @@ in {
     };
 
     # Config-source passthrough (Req 13.1, 13.2, 13.5)
-    xdg.configFile."nvim".source = configDir + "/nvim";
+    # Symlink nvim files individually so ~/.config/nvim/ stays writable (for lock files)
+    xdg.configFile."nvim/init.lua".source = configDir + "/nvim/init.lua";
+    xdg.configFile."nvim/lua".source = configDir + "/nvim/lua";
     xdg.configFile."emacs".source = configDir + "/emacs";
 
     # Language servers on PATH (Req 13.3)
@@ -42,6 +44,10 @@ in {
       # Formatters (standalone ones not bundled with language toolchains)
       csharpier
       prettier
+
+      # Tree-sitter CLI (needed by nvim-treesitter to compile grammars)
+      tree-sitter
+      gcc  # C compiler for tree-sitter grammar compilation
     ];
   };
 }

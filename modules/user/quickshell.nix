@@ -17,7 +17,7 @@ in {
       }
     ];
 
-    home.packages = [ inputs.quickshell.packages.x86_64-linux.default ];
+    home.packages = [ inputs.quickshell.packages.${pkgs.system}.default ];
 
     xdg.configFile."quickshell".source = configDir;
   };

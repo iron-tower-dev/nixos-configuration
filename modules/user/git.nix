@@ -22,22 +22,27 @@ in {
     # Git configuration (Req 21.1, 21.2)
     programs.git = {
       enable = true;
-      userName = cfg.userName;
-      userEmail = cfg.userEmail;
       extraConfig = {
+        user.name = cfg.userName;
+        user.email = cfg.userEmail;
         init.defaultBranch = "main";
         pull.rebase = true;
         core.editor = "nvim";
       };
     };
 
-    # SSH configuration with GitHub host entry (Req 21.3, 21.4)
+    # SSH configuration with GitHub/Codeberg host entries (Req 21.3, 21.4)
     programs.ssh = {
       enable = true;
-      matchBlocks."github.com" = {
-        identityFile = "~/.ssh/id_ed25519";
-        user = "git";
-      };
+      extraConfig = ''
+        Host github.com
+          User git
+          IdentityFile ~/.ssh/id_ed25519
+
+        Host codeberg.org
+          User git
+          IdentityFile ~/.ssh/id_ed25519
+      '';
     };
 
     # SSH agent to auto-add GitHub key on session start (Req 21.5)
