@@ -17,8 +17,8 @@ in
     self.nixosModules.bluetooth
     self.nixosModules.locale
     self.nixosModules."nix-settings"
-    ../../modules/gaming/gpu.nix
-    ../../modules/gaming/steam.nix
+    self.nixosModules.gpu
+    self.nixosModules.steam
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/login.nix
     ../../modules/desktop/comms.nix

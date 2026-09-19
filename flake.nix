@@ -48,6 +48,7 @@
       systems = [ "x86_64-linux" ];
       imports = [
         (import-tree ./modules/base)
+        (import-tree ./modules/gaming)
       ];
 
       flake.nixosConfigurations.gantry = nixpkgs.lib.nixosSystem {
