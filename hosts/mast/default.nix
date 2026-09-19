@@ -15,12 +15,15 @@ in
     ../../modules/base/networking.nix
     ../../modules/base/audio.nix
     ../../modules/base/bluetooth.nix
+    ../../modules/base/locale.nix
+    ../../modules/base/nix-settings.nix
     ../../modules/gaming/gpu.nix
     ../../modules/gaming/steam.nix
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/login.nix
     ../../modules/desktop/comms.nix
     ../../modules/services/virtualization.nix
+    ../../modules/services/containers.nix
     ../../modules/services/impermanence.nix
     ../../modules/services/secrets.nix
     ../../modules/services/power.nix
