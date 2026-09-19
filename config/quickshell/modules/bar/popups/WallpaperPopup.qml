@@ -36,24 +36,14 @@ Rectangle {
     }
 
     Process { id: awwwProc; running: false }
-    Process { id: wallustProc; running: false }
+    Process { id: themeSwitchProc; running: false }
 
     function applyWallpaper(filename) {
         const fullPath = `${wallpaperDir}/${filename}`
-        awwwProc.command = ["awww", "img", fullPath]
+        awwwProc.command = ["swww", "img", fullPath]
         awwwProc.running = true
-        wallustTimer.path = fullPath
-        wallustTimer.start()
-    }
-
-    Timer {
-        id: wallustTimer
-        property string path: ""
-        interval: 500
-        onTriggered: {
-            wallustProc.command = [Quickshell.env("HOME") + "/.cargo/bin/wallust", "run", path]
-            wallustProc.running = true
-        }
+        themeSwitchProc.command = ["theme-switch", "--wallpaper", fullPath]
+        themeSwitchProc.running = true
     }
 
     ColumnLayout {

@@ -11,5 +11,8 @@ config/emacs/.mc-lists.el
 # Neovim
 config/nvim/plugin/
 
+# Lua LSP config files (editor-generated)
+.luarc.json
+
 # Kiro specs (IDE-local)
 .kiro/
