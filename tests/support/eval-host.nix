@@ -12,6 +12,8 @@ let
   lib = flake.inputs.nixpkgs.lib;
 in
 {
+  inputs = flake.inputs;
+
   evalHost = modules: lib.nixosSystem {
     system = "x86_64-linux";
     modules = [{ system.stateVersion = "25.05"; }] ++ modules;
