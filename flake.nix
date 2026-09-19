@@ -46,11 +46,26 @@
   outputs = inputs@{ self, nixpkgs, flake-parts, import-tree, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
+
       imports = [
+        # flake-parts pre-declares `flake.nixosModules`/`flake.darwinModules`
+        # as mergeable (lazyAttrsOf deferredModule), but not
+        # `flake.homeModules` — home-manager isn't its concern. Without this,
+        # every file's `flake.homeModules.<tag> = ...;` collides as "defined
+        # multiple times" on a non-mergeable freeform attrset instead of
+        # merging cleanly.
+        {
+          options.flake.homeModules = nixpkgs.lib.mkOption {
+            type = nixpkgs.lib.types.lazyAttrsOf nixpkgs.lib.types.deferredModule;
+            default = { };
+          };
+        }
+
         (import-tree ./modules/base)
         (import-tree ./modules/gaming)
         (import-tree ./modules/services)
         (import-tree ./modules/host)
+        (import-tree ./modules/dev)
       ];
 
       flake.nixosConfigurations.gantry = nixpkgs.lib.nixosSystem {

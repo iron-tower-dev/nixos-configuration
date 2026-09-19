@@ -67,8 +67,8 @@ in
       ../../modules/desktop/clipboard.nix
       ../../modules/desktop/xdg.nix
       ../../modules/desktop/utilities.nix
-      ../../modules/dev/languages.nix
-      ../../modules/dev/devenv.nix
+      self.homeModules.languages
+      self.homeModules.devenv
     ];
   };
 

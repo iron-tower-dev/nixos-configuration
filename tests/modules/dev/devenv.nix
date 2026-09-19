@@ -4,7 +4,7 @@ let
   harness = import ../../support/eval-home.nix;
   hm = harness.evalHome [
     ../../../modules/desktop/shells.nix # already enables direnv/nix-direnv
-    ../../../modules/dev/devenv.nix
+    (harness.homeModuleFrom ../../../modules/dev/devenv.nix "devenv")
   ];
   cfg = hm.config;
   hasPname = name: pkgs: builtins.any (p: (p.pname or p.name or "") == name) pkgs;

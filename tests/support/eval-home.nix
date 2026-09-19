@@ -9,6 +9,10 @@ in
 {
   inputs = flake.inputs;
 
+  # Pulls a converted file's real home-manager-module body out of its
+  # flake-parts wrapper shape ({ flake.homeModules.<tag> = moduleBody; }).
+  homeModuleFrom = path: tag: (import path { }).flake.homeModules.${tag};
+
   evalHome = modules: flake.inputs.home-manager.lib.homeManagerConfiguration {
     inherit pkgs;
     extraSpecialArgs = { inherit (flake) inputs; };
