@@ -1,7 +1,7 @@
-# Run: nix eval --impure --file tests/hosts/mast/disko.nix --apply "f: f {}"
+# Run: nix eval --impure --file tests/hosts/mast/_disko.nix --apply "f: f {}"
 { lib ? (import <nixpkgs> { }).lib }:
 let
-  cfg = import ../../../hosts/mast/disko.nix;
+  cfg = import ../../../hosts/mast/_disko.nix;
 in
 lib.runTests {
   # PLACEHOLDER — single-NVMe assumption, not yet confirmed via lsblk on the

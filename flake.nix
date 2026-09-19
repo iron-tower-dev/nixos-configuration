@@ -31,18 +31,13 @@
     import-tree.url = "github:vic/import-tree";
   };
 
-  # MIGRATION NOTE: import-tree is scoped to only the subtrees that have
-  # actually been converted to the flake-parts module shape so far. Widen
-  # this list as each subtree converts; do NOT point it at the whole
-  # ./modules or ./hosts directory until every file under it has been
-  # converted — a single still-old-shape file swept in by import-tree
-  # breaks the entire flake-parts evaluation (a plain NixOS module fed into
-  # flake-parts' own option schema errors immediately, since e.g.
-  # `hardware.graphics.enable` isn't a flake-parts option).
-  #
-  # nixosConfigurations.{gantry,mast} stay manually assembled here (not
-  # relying on `import-tree ./hosts` self-registration) until hosts/gantry
-  # and hosts/mast themselves are converted last, per the migration plan.
+  # Every file under ./modules and ./hosts is a self-registering flake-parts
+  # module (flake.nixosModules.<tag> / flake.homeModules.<tag> /
+  # flake.nixosConfigurations.<host>), auto-discovered by import-tree — no
+  # per-file registration needed here. Host disko configs (hosts/*/_disko.nix)
+  # are underscore-prefixed specifically so import-tree's default filter
+  # skips them: they're plain attrsets consumed directly by each host's own
+  # module body, not flake-parts modules themselves.
   outputs = inputs@{ self, nixpkgs, flake-parts, import-tree, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
@@ -74,24 +69,8 @@
           };
         }
 
-        (import-tree ./modules/base)
-        (import-tree ./modules/gaming)
-        (import-tree ./modules/services)
-        (import-tree ./modules/host)
-        (import-tree ./modules/dev)
-        (import-tree ./modules/desktop)
+        (import-tree ./modules)
+        (import-tree ./hosts)
       ];
-
-      flake.nixosConfigurations.gantry = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs self; };
-        modules = [ ./hosts/gantry ];
-      };
-
-      flake.nixosConfigurations.mast = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs self; };
-        modules = [ ./hosts/mast ];
-      };
     };
 }

@@ -1,7 +1,7 @@
-# Run: nix eval --impure --file tests/hosts/gantry/disko.nix --apply "f: f {}"
+# Run: nix eval --impure --file tests/hosts/gantry/_disko.nix --apply "f: f {}"
 { lib ? (import <nixpkgs> { }).lib }:
 let
-  cfg = import ../../../hosts/gantry/disko.nix;
+  cfg = import ../../../hosts/gantry/_disko.nix;
 in
 lib.runTests {
   # Real device — confirmed via lsblk on iron-tower (this exact desktop hardware).
