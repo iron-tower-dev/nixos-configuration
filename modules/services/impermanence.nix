@@ -31,12 +31,17 @@ in
       options = [ "size=8G" "mode=755" ];
     };
 
+    # /etc/ssh and friends bind-mount from here before regular fstab
+    # processing, so /persist itself must be available at that point.
+    fileSystems."/persist".neededForBoot = true;
+
     environment.persistence."/persist" = {
       hideMounts = true;
       directories = [
         "/etc/ssh" # host keys — also what sops-nix's per-host age key derives from
         "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"
+        "/var/lib/nixos" # uid/gid allocations — without this, ids get reassigned every boot
       ] ++ cfg.directories;
       files = cfg.files;
     };

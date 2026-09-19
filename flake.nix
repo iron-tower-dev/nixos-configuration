@@ -1,5 +1,5 @@
 {
-  description = "Modular NixOS configuration for meridian";
+  description = "Dendritic multi-host NixOS configuration (gantry, mast)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -28,21 +28,17 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, hyprland, quickshell, matugen, ... }@inputs: {
-    nixosConfigurations.meridian = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations.gantry = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
-      modules = [
-        ./hosts/meridian/default.nix
-        ./modules/system
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.ds = import ./modules/user;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-        }
-      ];
+      modules = [ ./hosts/gantry ];
+    };
+
+    nixosConfigurations.mast = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [ ./hosts/mast ];
     };
   };
 }

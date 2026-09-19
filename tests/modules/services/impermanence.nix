@@ -43,4 +43,19 @@ lib.runTests {
     expr = hasDir "/etc/ssh" sysExtended.config.environment.persistence."/persist".directories;
     expected = true;
   };
+
+  # /etc/ssh etc. bind-mount from /persist before regular fstab processing —
+  # without this, NixOS's own activation assertion fails the build.
+  testPersistNeededForBoot = {
+    expr = cfg.fileSystems."/persist".neededForBoot;
+    expected = true;
+  };
+
+  # Without this, uid/gid allocations for users/groups lacking an explicit
+  # id (e.g. the primary user) get reassigned every boot, scrambling file
+  # ownership on anything already in /persist.
+  testNixosStateDirPersisted = {
+    expr = hasDir "/var/lib/nixos" cfg.environment.persistence."/persist".directories;
+    expected = true;
+  };
 }
