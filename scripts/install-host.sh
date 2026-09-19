@@ -365,16 +365,27 @@ if [[ -z "$(git config user.email 2>/dev/null)" ]]; then
   note "✓ set a local (repo-only) git identity for this commit"
 fi
 BRANCH="${HOST}-hardware-values"
-git checkout -b "$BRANCH"
+# Safe to re-run: an earlier attempt (e.g. one that failed later in this same
+# stage) may have already created this branch.
+if git rev-parse --verify "$BRANCH" >/dev/null 2>&1; then
+  git checkout "$BRANCH"
+  note "✓ switched to existing branch $BRANCH (from an earlier attempt)"
+else
+  git checkout -b "$BRANCH"
+fi
 git add "hosts/${HOST}/_disko.nix" "hosts/${HOST}/default.nix" "hosts/${HOST}/hardware-configuration.nix"
-git commit -m "$(cat <<EOF
+if git commit -m "$(cat <<EOF
 Add real hardware values for ${HOST}
 
 - disk device: ${DISK_DEVICE}
 - GPU PCI bus IDs: amd=${AMD_BUS_ID} nvidia=${NVIDIA_BUS_ID}
 - generated hardware-configuration.nix (nixos-generate-config --no-filesystems)
 EOF
-)"
+)"; then
+  note "✓ committed"
+else
+  note "nothing new to commit — already committed on an earlier attempt"
+fi
 if git push -u origin "$BRANCH" 2>/dev/null; then
   note "✓ pushed $BRANCH"
   if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
