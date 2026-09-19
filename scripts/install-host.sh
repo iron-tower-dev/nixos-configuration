@@ -386,7 +386,7 @@ EOF
 else
   note "nothing new to commit — already committed on an earlier attempt"
 fi
-if git push -u origin "$BRANCH" 2>/dev/null; then
+if GIT_TERMINAL_PROMPT=0 git push -u origin "$BRANCH" 2>/dev/null; then
   note "✓ pushed $BRANCH"
   if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
     gh pr create --fill --base main --head "$BRANCH" || warn "PR creation failed — open one by hand later"
