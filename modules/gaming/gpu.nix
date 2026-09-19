@@ -20,13 +20,17 @@ let
 
         prime.amdgpuBusId = lib.mkOption {
           type = lib.types.str;
-          default = "PCI:5:0:0"; # PLACEHOLDER — replace with `lspci | grep VGA` output from mast.
+          # Generic fallback only — any real nvidia-hybrid host should set its
+          # own confirmed value (see hosts/mast/default.nix's override).
+          default = "PCI:5:0:0";
           description = "AMD iGPU PCI bus ID for hardware.nvidia.prime (nvidia-hybrid only).";
         };
 
         prime.nvidiaBusId = lib.mkOption {
           type = lib.types.str;
-          default = "PCI:1:0:0"; # PLACEHOLDER — replace with `lspci | grep VGA` output from mast.
+          # Generic fallback only — any real nvidia-hybrid host should set its
+          # own confirmed value (see hosts/mast/default.nix's override).
+          default = "PCI:1:0:0";
           description = "NVIDIA dGPU PCI bus ID for hardware.nvidia.prime (nvidia-hybrid only).";
         };
       };

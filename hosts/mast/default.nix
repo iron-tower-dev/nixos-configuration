@@ -45,9 +45,9 @@ let
       custom.host = hostsLib.mast;
       custom.gaming.gpu.driver = hostsLib.mast.gpu.driver;
       custom.gaming.gpu.prime = {
-        # PLACEHOLDER PCI bus IDs — replace with real `lspci | grep -E 'VGA|3D'`
-        # output from the physical laptop before deploying.
-        amdgpuBusId = "PCI:5:0:0";
+        # Confirmed via `lspci -nn | grep -E 'VGA|3D'` on the physical machine
+        # during install.
+        amdgpuBusId = "PCI:4:0:0";
         nvidiaBusId = "PCI:1:0:0";
       };
 
