@@ -46,6 +46,10 @@ in
     home.stateVersion = "25.05";
     imports = [
       ../../modules/desktop/git.nix
+      ../../modules/desktop/hyprland-home.nix
+      ../../modules/desktop/quickshell.nix
+      ../../modules/desktop/rofi.nix
+      ../../modules/desktop/theming.nix
       ../../modules/desktop/shells.nix
       ../../modules/desktop/terminal.nix
       ../../modules/desktop/editors.nix

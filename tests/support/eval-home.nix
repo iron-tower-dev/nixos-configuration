@@ -7,8 +7,11 @@ let
   pkgs = import flake.inputs.nixpkgs { system = "x86_64-linux"; config.allowUnfree = true; };
 in
 {
+  inputs = flake.inputs;
+
   evalHome = modules: flake.inputs.home-manager.lib.homeManagerConfiguration {
     inherit pkgs;
+    extraSpecialArgs = { inherit (flake) inputs; };
     modules = [
       {
         home.stateVersion = "25.05";
