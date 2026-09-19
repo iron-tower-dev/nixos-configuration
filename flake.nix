@@ -50,6 +50,7 @@
         (import-tree ./modules/base)
         (import-tree ./modules/gaming)
         (import-tree ./modules/services)
+        (import-tree ./modules/host)
       ];
 
       flake.nixosConfigurations.gantry = nixpkgs.lib.nixosSystem {

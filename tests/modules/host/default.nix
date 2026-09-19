@@ -3,7 +3,7 @@
 let
   harness = import ../../support/eval-host.nix;
   sys = harness.evalHost [
-    ../../../modules/host
+    (harness.nixosModuleFrom ../../../modules/host "host")
     { custom.host = { isGaming = true; isDev = true; isServer = false; }; }
   ];
   cfg = sys.config;
@@ -11,7 +11,7 @@ in
 lib.runTests {
   testHostRoleIsReadable = { expr = cfg.custom.host.isGaming; expected = true; };
   testDefaultIsEmptyAttrs = {
-    expr = (harness.evalHost [ ../../../modules/host ]).config.custom.host;
+    expr = (harness.evalHost [ (harness.nixosModuleFrom ../../../modules/host "host") ]).config.custom.host;
     expected = { };
   };
 }

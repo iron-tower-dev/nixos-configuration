@@ -3,7 +3,7 @@
 let
   harness = import ../../support/eval-host.nix;
   mkSys = { driver, isGaming ? true }: harness.evalHost [
-    ../../../modules/host
+    (harness.nixosModuleFrom ../../../modules/host "host")
     (harness.nixosModuleFrom ../../../modules/gaming/gpu.nix "gpu")
     (harness.nixosModuleFrom ../../../modules/gaming/steam.nix "steam")
     { custom.gaming.gpu.driver = driver; custom.host.isGaming = isGaming; }

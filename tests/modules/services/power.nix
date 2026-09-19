@@ -3,7 +3,7 @@
 let
   harness = import ../../support/eval-host.nix;
   mkSys = tlp: harness.evalHost [
-    ../../../modules/host
+    (harness.nixosModuleFrom ../../../modules/host "host")
     (harness.nixosModuleFrom ../../../modules/services/power.nix "power")
     { custom.host.power.tlp = tlp; }
   ];

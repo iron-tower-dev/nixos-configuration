@@ -9,7 +9,7 @@ in
   imports = [
     ./disko.nix
 
-    ../../modules/host
+    self.nixosModules.host
     self.nixosModules.boot
     self.nixosModules.users
     self.nixosModules.networking
