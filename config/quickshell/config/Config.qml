@@ -14,7 +14,7 @@ Singleton {
     // --- Convenience properties with defaults ---
 
     property string fontFamily: data.appearance?.fontFamily ?? "JetBrainsMono Nerd Font"
-    property string wallustColorsPath: _expandHome(data.paths?.wallustColors ?? "/home/ds/.cache/wallust/colors.json")
+    property string wallustColorsPath: _expandHome(data.paths?.wallustColors ?? "~/.cache/theme/colors.json")
     property bool debug: data.debug ?? false
 
     property var notifications: data.notifications ?? {

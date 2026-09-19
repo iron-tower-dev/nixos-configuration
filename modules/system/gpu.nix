@@ -57,6 +57,9 @@ in {
         __GLX_VENDOR_LIBRARY_NAME = "nvidia";
         GBM_BACKEND = "nvidia-drm";
         WLR_NO_HARDWARE_CURSORS = "1";
+        # Qt OpenGL backend for NVIDIA Wayland (needed by QuickShell/QML)
+        QSG_RHI_BACKEND = "opengl";
+        __NV_PRIME_RENDER_OFFLOAD = "1";
       };
     })
   ]);

@@ -27,7 +27,9 @@ in {
       pkgs.hyprpolkitagent
     ];
 
-    xdg.configFile."hypr".source = configDir;
-    xdg.configFile."wallpapers".source = wallpapersDir;
+    xdg.configFile."hypr/hyprland.lua".source = configDir + "/hyprland.lua";
+    xdg.configFile."hypr/hypridle.conf".source = configDir + "/hypridle.conf";
+    # Wallpapers: user-managed directory at ~/.config/wallpapers/
+    # Add images directly there; not symlinked from nix store.
   };
 }

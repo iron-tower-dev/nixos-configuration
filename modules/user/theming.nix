@@ -147,7 +147,7 @@ let
       echo "Generating color scheme from wallpaper: $wallpaper_path"
 
       # Run matugen - it writes to colors.json.tmp via config.toml (Req 3.1, 8.4)
-      if matugen image "$wallpaper_path" 2>/tmp/matugen-error.log; then
+      if matugen image "$wallpaper_path" --source-color-index 0 2>/tmp/matugen-error.log; then
         # Verify matugen wrote the tmp file
         if [[ ! -f "$COLOR_TMP" ]]; then
           echo "Error: matugen did not produce output file." >&2
@@ -196,10 +196,11 @@ in {
   config = lib.mkIf cfg.enable {
     # Install matugen from flake input (Req 18.1)
     home.packages = [
-      inputs.matugen.packages.x86_64-linux.default
+      inputs.matugen.packages.${pkgs.system}.default
       theme-switch
       pkgs.phinger-cursors
       pkgs.papirus-icon-theme
+      pkgs.nerd-fonts.jetbrains-mono
     ];
 
     # Matugen config directory (Req 8.1, 8.2, 8.3)

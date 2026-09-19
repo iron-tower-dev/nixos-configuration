@@ -1,6 +1,6 @@
 [config]
 scheme = "scheme-tonal-spot"
-type = "scheme-content"
+type = "dark"
 contrast = 0.0
 
 [templates.colors-json]
