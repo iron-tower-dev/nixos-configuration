@@ -61,11 +61,25 @@
           };
         }
 
+        # flake-parts' default perSystem `pkgs` doesn't have allowUnfree set
+        # (it's a plain `legacyPackages.<system>`), unlike our hosts' own
+        # pkgs — comms.nix's discord package build fails perSystem
+        # evaluation otherwise.
+        {
+          perSystem = { system, ... }: {
+            _module.args.pkgs = import nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+            };
+          };
+        }
+
         (import-tree ./modules/base)
         (import-tree ./modules/gaming)
         (import-tree ./modules/services)
         (import-tree ./modules/host)
         (import-tree ./modules/dev)
+        (import-tree ./modules/desktop)
       ];
 
       flake.nixosConfigurations.gantry = nixpkgs.lib.nixosSystem {

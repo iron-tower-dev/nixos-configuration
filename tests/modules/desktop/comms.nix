@@ -1,10 +1,14 @@
 # Run: nix eval --impure --file tests/modules/desktop/comms.nix --apply "f: f {}"
 { lib ? (import <nixpkgs> { }).lib }:
 let
+  flakePartsModule = import ../../../modules/desktop/comms.nix { };
+  pkgs = import <nixpkgs> { system = "x86_64-linux"; config.allowUnfree = true; };
+  discordPkg = (flakePartsModule.perSystem { inherit pkgs; }).packages.discord;
+
   harness = import ../../support/eval-host.nix;
   sys = harness.evalHost [
-    { nixpkgs.config.allowUnfree = true; }
-    ../../../modules/desktop/comms.nix
+    { _module.args.self = { packages.${pkgs.stdenv.hostPlatform.system}.discord = discordPkg; }; }
+    flakePartsModule.flake.nixosModules.comms
   ];
   cfg = sys.config;
   pkgNames = builtins.map (p: p.pname or p.name or "") cfg.environment.systemPackages;

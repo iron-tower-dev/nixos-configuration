@@ -2,7 +2,7 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-home.nix;
-  hm = harness.evalHome [ ../../../modules/desktop/browsers.nix ];
+  hm = harness.evalHome [ (harness.homeModuleFrom ../../../modules/desktop/browsers.nix "browsers") ];
   cfg = hm.config;
 in
 lib.runTests {

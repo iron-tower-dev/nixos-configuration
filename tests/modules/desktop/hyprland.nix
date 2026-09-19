@@ -2,7 +2,7 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-host.nix;
-  sys = harness.evalHost [ ../../../modules/desktop/hyprland.nix ];
+  sys = harness.evalHost [ (harness.nixosModuleFrom ../../../modules/desktop/hyprland.nix "hyprland") ];
   cfg = sys.config;
 in
 lib.runTests {

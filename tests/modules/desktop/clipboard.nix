@@ -2,7 +2,7 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-home.nix;
-  hm = harness.evalHome [ ../../../modules/desktop/clipboard.nix ];
+  hm = harness.evalHome [ (harness.homeModuleFrom ../../../modules/desktop/clipboard.nix "clipboard") ];
   cfg = hm.config;
   hasPname = name: pkgs: builtins.any (p: (p.pname or p.name or "") == name) pkgs;
 in

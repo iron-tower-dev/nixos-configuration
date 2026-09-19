@@ -19,9 +19,9 @@ in
     self.nixosModules."nix-settings"
     self.nixosModules.gpu
     self.nixosModules.steam
-    ../../modules/desktop/hyprland.nix
-    ../../modules/desktop/login.nix
-    ../../modules/desktop/comms.nix
+    self.nixosModules.hyprland
+    self.nixosModules.login
+    self.nixosModules.comms
     self.nixosModules.virtualization
     self.nixosModules.containers
     self.nixosModules.impermanence
@@ -50,23 +50,23 @@ in
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.extraSpecialArgs = { inherit inputs; };
+  home-manager.extraSpecialArgs = { inherit inputs self; };
   home-manager.users.${userName} = {
     home.stateVersion = "25.05";
     imports = [
-      ../../modules/desktop/git.nix
-      ../../modules/desktop/hyprland-home.nix
-      ../../modules/desktop/quickshell.nix
-      ../../modules/desktop/rofi.nix
-      ../../modules/desktop/theming.nix
-      ../../modules/desktop/shells.nix
-      ../../modules/desktop/terminal.nix
-      ../../modules/desktop/editors.nix
-      ../../modules/desktop/files.nix
-      ../../modules/desktop/browsers.nix
-      ../../modules/desktop/clipboard.nix
-      ../../modules/desktop/xdg.nix
-      ../../modules/desktop/utilities.nix
+      self.homeModules.git
+      self.homeModules."hyprland-home"
+      self.homeModules.quickshell
+      self.homeModules.rofi
+      self.homeModules.theming
+      self.homeModules.shells
+      self.homeModules.terminal
+      self.homeModules.editors
+      self.homeModules.files
+      self.homeModules.browsers
+      self.homeModules.clipboard
+      self.homeModules.xdg
+      self.homeModules.utilities
       self.homeModules.languages
       self.homeModules.devenv
     ];

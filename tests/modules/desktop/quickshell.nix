@@ -2,7 +2,7 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-home.nix;
-  hm = harness.evalHome [ ../../../modules/desktop/quickshell.nix ];
+  hm = harness.evalHome [ (harness.homeModuleFrom ../../../modules/desktop/quickshell.nix "quickshell") ];
   cfg = hm.config;
 in
 lib.runTests {

@@ -1,8 +1,15 @@
 # Run: nix eval --impure --file tests/modules/desktop/theming.nix --apply "f: f {}"
 { lib ? (import <nixpkgs> { }).lib }:
 let
+  flakePartsModule = import ../../../modules/desktop/theming.nix { };
+  pkgs = import <nixpkgs> { system = "x86_64-linux"; config.allowUnfree = true; };
+  themeSwitchPkg = (flakePartsModule.perSystem { inherit pkgs; }).packages.theme-switch;
+
   harness = import ../../support/eval-home.nix;
-  hm = harness.evalHome [ ../../../modules/desktop/theming.nix ];
+  hm = harness.evalHome [
+    { _module.args.self = { packages.${pkgs.stdenv.hostPlatform.system}.theme-switch = themeSwitchPkg; }; }
+    flakePartsModule.flake.homeModules.theming
+  ];
   cfg = hm.config;
   hasPname = name: pkgs: builtins.any (p: (p.pname or p.name or "") == name) pkgs;
 in
@@ -14,6 +21,10 @@ lib.runTests {
     expected = true;
   };
   testThemeSwitchScriptInstalled = { expr = hasPname "theme-switch" cfg.home.packages; expected = true; };
+  testThemeSwitchSupportsPresets = {
+    expr = lib.hasInfix "catppuccin-mocha" themeSwitchPkg.text;
+    expected = true;
+  };
   testMatugenConfigSourced = { expr = builtins.pathExists cfg.xdg.configFile."matugen".source; expected = true; };
 
   testGtkEnabled = { expr = cfg.gtk.enable; expected = true; };

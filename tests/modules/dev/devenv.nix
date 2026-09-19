@@ -3,7 +3,7 @@
 let
   harness = import ../../support/eval-home.nix;
   hm = harness.evalHome [
-    ../../../modules/desktop/shells.nix # already enables direnv/nix-direnv
+    (harness.homeModuleFrom ../../../modules/desktop/shells.nix "shells") # already enables direnv/nix-direnv
     (harness.homeModuleFrom ../../../modules/dev/devenv.nix "devenv")
   ];
   cfg = hm.config;

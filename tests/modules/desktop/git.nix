@@ -2,7 +2,7 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-home.nix;
-  hm = harness.evalHome [ ../../../modules/desktop/git.nix ];
+  hm = harness.evalHome [ (harness.homeModuleFrom ../../../modules/desktop/git.nix "git") ];
   cfg = hm.config;
 in
 lib.runTests {
