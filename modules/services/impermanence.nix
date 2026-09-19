@@ -1,6 +1,7 @@
 { config, lib, ... }:
 let
   cfg = config.custom.services.impermanence;
+  userName = config.custom.base.users.name;
 in
 {
   options.custom.services.impermanence = {
@@ -19,6 +20,14 @@ in
       type = lib.types.listOf lib.types.str;
       default = [ ];
       description = "Individual files bind-mounted from /persist.";
+    };
+
+    # Same additive pattern, but for paths under the user's own home
+    # directory (relative to $HOME) rather than system-wide state.
+    userDirectories = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "Extra $HOME-relative directories bind-mounted from /persist, beyond the always-persisted base set (SSH keys, Steam library, Firefox profile).";
     };
   };
 
@@ -44,6 +53,15 @@ in
         "/var/lib/nixos" # uid/gid allocations — without this, ids get reassigned every boot
       ] ++ cfg.directories;
       files = cfg.files;
+
+      users.${userName}.directories = [
+        ".ssh" # user SSH keys — git.nix's ~/.ssh/id_ed25519 identity depends on this
+        ".local/share/Steam" # Steam library and game saves
+        ".mozilla" # Firefox profile — bookmarks, saved logins, browsing data
+        ".local/state" # XDG state home — e.g. theming.nix's active-theme file
+        "Pictures" # clipboard.nix's screenshot script writes real files here
+        ".config/wallpapers" # user-managed wallpaper images, not Nix-store-sourced
+      ] ++ cfg.userDirectories;
     };
   };
 }

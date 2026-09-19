@@ -2,23 +2,28 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-host.nix;
-  sys = harness.evalHost [
+  mkSys = isDev: harness.evalHost [
+    ../../../modules/host
     ../../../modules/base/users.nix
     ../../../modules/services/containers.nix
+    { custom.host.isDev = isDev; }
   ];
-  cfg = sys.config;
+  dev = (mkSys true).config;
+  notDev = (mkSys false).config;
 in
 lib.runTests {
-  testPodmanEnabled = { expr = cfg.virtualisation.podman.enable; expected = true; };
-  testPodmanDnsEnabled = { expr = cfg.virtualisation.podman.defaultNetwork.settings.dns_enabled; expected = true; };
-  testDockerEnabled = { expr = cfg.virtualisation.docker.enable; expected = true; };
-  testUserInDockerGroup = { expr = builtins.elem "docker" cfg.users.users.ds.extraGroups; expected = true; };
+  testPodmanEnabled = { expr = dev.virtualisation.podman.enable; expected = true; };
+  testPodmanDnsEnabled = { expr = dev.virtualisation.podman.defaultNetwork.settings.dns_enabled; expected = true; };
+  testDockerEnabled = { expr = dev.virtualisation.docker.enable; expected = true; };
+  testUserInDockerGroup = { expr = builtins.elem "docker" dev.users.users.ds.extraGroups; expected = true; };
   testUserHasSubUidRange = {
-    expr = cfg.users.users.ds.subUidRanges;
+    expr = dev.users.users.ds.subUidRanges;
     expected = [{ startUid = 100000; count = 65536; }];
   };
   testUserHasSubGidRange = {
-    expr = cfg.users.users.ds.subGidRanges;
+    expr = dev.users.users.ds.subGidRanges;
     expected = [{ startGid = 100000; count = 65536; }];
   };
+
+  testDockerDisabledWhenNotDev = { expr = notDev.virtualisation.docker.enable; expected = false; };
 }

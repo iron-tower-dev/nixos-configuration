@@ -1,9 +1,9 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   userName = config.custom.base.users.name;
 in
 {
-  config = {
+  config = lib.mkIf config.custom.host.isDev {
     # OVMF (UEFI guest firmware) ships with QEMU by default in this nixpkgs —
     # no separate enable option exists anymore.
     virtualisation.libvirtd.enable = true;

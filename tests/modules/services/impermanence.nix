@@ -4,9 +4,11 @@ let
   harness = import ../../support/eval-host.nix;
   sys = harness.evalHost [
     harness.inputs.impermanence.nixosModules.impermanence
+    ../../../modules/base/users.nix
     ../../../modules/services/impermanence.nix
   ];
   cfg = sys.config;
+  hasUserDir = path: dirs: builtins.any (d: d.directory == path) dirs;
 
   sysExtended = harness.evalHost [
     harness.inputs.impermanence.nixosModules.impermanence
@@ -56,6 +58,41 @@ lib.runTests {
   # ownership on anything already in /persist.
   testNixosStateDirPersisted = {
     expr = hasDir "/var/lib/nixos" cfg.environment.persistence."/persist".directories;
+    expected = true;
+  };
+
+  # Without these, the user's actual data (not dotfiles-managed config,
+  # which home-manager regenerates every activation) vanishes every boot.
+  # .ssh in particular is what git.nix's ~/.ssh/id_ed25519 identity depends on.
+  testUserSshKeysPersisted = {
+    expr = hasUserDir ".ssh" cfg.environment.persistence."/persist".users.ds.directories;
+    expected = true;
+  };
+  testSteamLibraryPersisted = {
+    expr = hasUserDir ".local/share/Steam" cfg.environment.persistence."/persist".users.ds.directories;
+    expected = true;
+  };
+  testFirefoxProfilePersisted = {
+    expr = hasUserDir ".mozilla" cfg.environment.persistence."/persist".users.ds.directories;
+    expected = true;
+  };
+  # Otherwise theming.nix's restoreTheme activation hook can never find a
+  # state file to restore from -- it would always be a no-op.
+  testXdgStateHomePersisted = {
+    expr = hasUserDir ".local/state" cfg.environment.persistence."/persist".users.ds.directories;
+    expected = true;
+  };
+  # clipboard.nix's screenshot script writes real image files here, not cache.
+  testScreenshotsPersisted = {
+    expr = hasUserDir "Pictures" cfg.environment.persistence."/persist".users.ds.directories;
+    expected = true;
+  };
+  # hyprland-home.nix: wallpapers are placed here by hand, not managed by
+  # Nix/home-manager -- the old repo's own comment already called this out
+  # as "not symlinked from the store", which is exactly what impermanence
+  # would otherwise wipe every boot.
+  testWallpapersPersisted = {
+    expr = hasUserDir ".config/wallpapers" cfg.environment.persistence."/persist".users.ds.directories;
     expected = true;
   };
 }

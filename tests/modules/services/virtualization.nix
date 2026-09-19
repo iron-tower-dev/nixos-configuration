@@ -2,17 +2,22 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-host.nix;
-  sys = harness.evalHost [
+  mkSys = isDev: harness.evalHost [
+    ../../../modules/host
     ../../../modules/base/users.nix
     ../../../modules/services/virtualization.nix
+    { custom.host.isDev = isDev; }
   ];
-  cfg = sys.config;
+  dev = (mkSys true).config;
+  notDev = (mkSys false).config;
 in
 lib.runTests {
-  testLibvirtdEnabled = { expr = cfg.virtualisation.libvirtd.enable; expected = true; };
-  testVirtManagerEnabled = { expr = cfg.programs.virt-manager.enable; expected = true; };
+  testLibvirtdEnabled = { expr = dev.virtualisation.libvirtd.enable; expected = true; };
+  testVirtManagerEnabled = { expr = dev.programs.virt-manager.enable; expected = true; };
   testUserInLibvirtdGroup = {
-    expr = builtins.elem "libvirtd" cfg.users.users.ds.extraGroups;
+    expr = builtins.elem "libvirtd" dev.users.users.ds.extraGroups;
     expected = true;
   };
+
+  testLibvirtdDisabledWhenNotDev = { expr = notDev.virtualisation.libvirtd.enable; expected = false; };
 }
