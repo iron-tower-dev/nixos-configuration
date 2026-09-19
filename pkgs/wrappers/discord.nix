@@ -4,7 +4,7 @@
 { pkgs }:
 pkgs.symlinkJoin {
   name = "discord";
-  paths = [ pkgs.discord ];
+  paths = [ (pkgs.discord.override { withOpenASAR = true; }) ];
   nativeBuildInputs = [ pkgs.makeWrapper ];
   postBuild = ''
     wrapProgram $out/bin/discord \

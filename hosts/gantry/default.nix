@@ -44,7 +44,19 @@ in
   home-manager.extraSpecialArgs = { inherit inputs; };
   home-manager.users.${userName} = {
     home.stateVersion = "25.05";
-    imports = [ ../../modules/desktop/git.nix ];
+    imports = [
+      ../../modules/desktop/git.nix
+      ../../modules/desktop/shells.nix
+      ../../modules/desktop/terminal.nix
+      ../../modules/desktop/editors.nix
+      ../../modules/desktop/files.nix
+      ../../modules/desktop/browsers.nix
+      ../../modules/desktop/clipboard.nix
+      ../../modules/desktop/xdg.nix
+      ../../modules/desktop/utilities.nix
+      ../../modules/dev/languages.nix
+      ../../modules/dev/devenv.nix
+    ];
   };
 
   system.stateVersion = "25.05";
