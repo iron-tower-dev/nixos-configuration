@@ -264,10 +264,17 @@ pause "Press Enter to continue."
 
 # ── Stage 4: discover and confirm PCI bus IDs for the hybrid GPU ────────────
 stage "Confirm GPU PCI bus IDs"
-if ! grep -q 'amdgpuBusId = "PCI:5:0:0"' "hosts/${HOST}/default.nix" 2>/dev/null; then
+AMD_BUS_ID=""
+NVIDIA_BUS_ID=""
+if ! grep -q 'amdgpuBusId = ' "hosts/${HOST}/default.nix" 2>/dev/null; then
   say "hosts/${HOST}/default.nix doesn't declare the hybrid-GPU PRIME bus-ID"
   say "options (that pattern is specific to mast's AMD+NVIDIA Optimus laptop setup)."
   note "✓ nothing to do here for ${HOST} — skipping"
+  pause "Press Enter to continue."
+elif ! grep -q 'amdgpuBusId = "PCI:5:0:0"' "hosts/${HOST}/default.nix" 2>/dev/null; then
+  AMD_BUS_ID=$(sed -n 's/.*amdgpuBusId = "\([^"]*\)".*/\1/p' "hosts/${HOST}/default.nix" | head -1)
+  NVIDIA_BUS_ID=$(sed -n 's/.*nvidiaBusId = "\([^"]*\)".*/\1/p' "hosts/${HOST}/default.nix" | head -1)
+  note "✓ ${HOST} already has confirmed PCI bus IDs (amd=${AMD_BUS_ID} nvidia=${NVIDIA_BUS_ID}) — skipping re-discovery"
   pause "Press Enter to continue."
 else
 say "hosts/${HOST}/default.nix has placeholder PCI bus IDs for the AMD iGPU"
