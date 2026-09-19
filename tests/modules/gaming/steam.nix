@@ -2,13 +2,15 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-host.nix;
-  mkSys = driver: harness.evalHost [
+  mkSys = { driver, isGaming ? true }: harness.evalHost [
+    ../../../modules/host
     ../../../modules/gaming/gpu.nix
     ../../../modules/gaming/steam.nix
-    { custom.gaming.gpu.driver = driver; }
+    { custom.gaming.gpu.driver = driver; custom.host.isGaming = isGaming; }
   ];
-  amd = (mkSys "amd").config;
-  hybrid = (mkSys "nvidia-hybrid").config;
+  amd = (mkSys { driver = "amd"; }).config;
+  hybrid = (mkSys { driver = "nvidia-hybrid"; }).config;
+  notGaming = (mkSys { driver = "amd"; isGaming = false; }).config;
   hasPname = name: pkgs: builtins.any (p: (p.pname or p.name or "") == name) pkgs;
 in
 lib.runTests {
@@ -30,4 +32,12 @@ lib.runTests {
 
   testRadvEnvVarOnAmd = { expr = amd.environment.sessionVariables.AMD_VULKAN_ICD or null; expected = "RADV"; };
   testNoRadvEnvVarOnHybrid = { expr = hybrid.environment.sessionVariables.AMD_VULKAN_ICD or null; expected = null; };
+
+  # Gated on custom.host.isGaming — a non-gaming host gets none of this.
+  testSteamDisabledWhenNotGaming = { expr = notGaming.programs.steam.enable; expected = false; };
+  testGamemodeDisabledWhenNotGaming = { expr = notGaming.programs.gamemode.enable; expected = false; };
+  testNoGamingPackagesWhenNotGaming = {
+    expr = hasPname "lutris" notGaming.environment.systemPackages;
+    expected = false;
+  };
 }

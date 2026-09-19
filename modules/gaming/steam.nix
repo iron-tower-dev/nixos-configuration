@@ -3,7 +3,7 @@ let
   gpuCfg = config.custom.gaming.gpu;
 in
 {
-  config = {
+  config = lib.mkIf config.custom.host.isGaming {
     programs.steam = {
       enable = true;
       remotePlay.openFirewall = true;
