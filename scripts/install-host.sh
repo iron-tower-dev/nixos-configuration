@@ -342,18 +342,25 @@ pause "Confirmed the mounts above look right? Press Enter to continue."
 # ── Stage 7: real hardware-configuration.nix ────────────────────────────────
 stage "Generate hardware-configuration.nix"
 say "disko already declared filesystems, so we skip that part of the generic scan."
+# Underscore-prefixed for the same reason as _disko.nix: import-tree skips
+# paths with a "/_" segment by default. Without that, this file gets swept
+# up twice -- once correctly via the explicit import below, once incorrectly
+# as its own standalone flake-parts module, where modulesPath (a NixOS-eval-
+# specific argument this file needs) doesn't exist at all. That collision is
+# what produces the "infinite recursion... modulesPath" error.
+HW_CONFIG_FILE="_hardware-configuration.nix"
 sudo nixos-generate-config --no-filesystems --root /mnt
-sudo cp /mnt/etc/nixos/hardware-configuration.nix "hosts/${HOST}/hardware-configuration.nix"
-sudo chown "$(id -u):$(id -g)" "hosts/${HOST}/hardware-configuration.nix"
-if ! grep -q "hardware-configuration.nix" "hosts/${HOST}/default.nix"; then
-  sed -i "s|./_disko.nix|./_disko.nix\n        ./hardware-configuration.nix|" "hosts/${HOST}/default.nix"
-  note "✓ added ./hardware-configuration.nix to hosts/${HOST}/default.nix imports"
+sudo cp /mnt/etc/nixos/hardware-configuration.nix "hosts/${HOST}/${HW_CONFIG_FILE}"
+sudo chown "$(id -u):$(id -g)" "hosts/${HOST}/${HW_CONFIG_FILE}"
+if ! grep -q "$HW_CONFIG_FILE" "hosts/${HOST}/default.nix"; then
+  sed -i "s|./_disko.nix|./_disko.nix\n        ./${HW_CONFIG_FILE}|" "hosts/${HOST}/default.nix"
+  note "✓ added ./${HW_CONFIG_FILE} to hosts/${HOST}/default.nix imports"
 fi
-if grep -q "hardware.cpu.amd.updateMicrocode" "hosts/${HOST}/hardware-configuration.nix"; then
+if grep -q "hardware.cpu.amd.updateMicrocode" "hosts/${HOST}/${HW_CONFIG_FILE}"; then
   note "✓ AMD microcode updates already configured"
 else
-  warn "hardware-configuration.nix doesn't set hardware.cpu.amd.updateMicrocode."
-  say "Consider adding this line inside hosts/${HOST}/hardware-configuration.nix's config:"
+  warn "${HW_CONFIG_FILE} doesn't set hardware.cpu.amd.updateMicrocode."
+  say "Consider adding this line inside hosts/${HOST}/${HW_CONFIG_FILE}'s config:"
   say '  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;'
   pause "Edit it now in another terminal if you want, then press Enter to continue."
 fi
@@ -380,7 +387,7 @@ if git rev-parse --verify "$BRANCH" >/dev/null 2>&1; then
 else
   git checkout -b "$BRANCH"
 fi
-git add "hosts/${HOST}/_disko.nix" "hosts/${HOST}/default.nix" "hosts/${HOST}/hardware-configuration.nix"
+git add "hosts/${HOST}/_disko.nix" "hosts/${HOST}/default.nix" "hosts/${HOST}/${HW_CONFIG_FILE}"
 if git commit -m "$(cat <<EOF
 Add real hardware values for ${HOST}
 
@@ -402,7 +409,7 @@ if GIT_TERMINAL_PROMPT=0 git push -u origin "$BRANCH" 2>/dev/null; then
     warn "gh not available here — open a PR for $BRANCH from another machine later"
   fi
 else
-  SKIPPED+=("push branch $BRANCH (no network/auth here) — relay these values to wherever you do have push access: device=${DISK_DEVICE} amdgpuBusId=${AMD_BUS_ID} nvidiaBusId=${NVIDIA_BUS_ID}, plus this repo's hosts/${HOST}/hardware-configuration.nix")
+  SKIPPED+=("push branch $BRANCH (no network/auth here) — relay these values to wherever you do have push access: device=${DISK_DEVICE} amdgpuBusId=${AMD_BUS_ID} nvidiaBusId=${NVIDIA_BUS_ID}, plus this repo's hosts/${HOST}/${HW_CONFIG_FILE}")
   warn "couldn't push $BRANCH right now — that's expected on a live installer, see the summary at the end"
 fi
 pause "Press Enter to continue."
