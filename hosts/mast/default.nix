@@ -1,6 +1,6 @@
 # mast — ASUS ROG Zephyrus G14 GA401IV laptop, the near-term real
 # deployment target. Full wipe (no dual-boot), LUKS-encrypted.
-{ config, lib, inputs, ... }:
+{ config, lib, inputs, self, ... }:
 let
   hostsLib = import ../../lib/hosts.nix;
   userName = config.custom.base.users.name;
@@ -10,13 +10,13 @@ in
     ./disko.nix
 
     ../../modules/host
-    ../../modules/base/boot.nix
-    ../../modules/base/users.nix
-    ../../modules/base/networking.nix
-    ../../modules/base/audio.nix
-    ../../modules/base/bluetooth.nix
-    ../../modules/base/locale.nix
-    ../../modules/base/nix-settings.nix
+    self.nixosModules.boot
+    self.nixosModules.users
+    self.nixosModules.networking
+    self.nixosModules.audio
+    self.nixosModules.bluetooth
+    self.nixosModules.locale
+    self.nixosModules."nix-settings"
     ../../modules/gaming/gpu.nix
     ../../modules/gaming/steam.nix
     ../../modules/desktop/hyprland.nix

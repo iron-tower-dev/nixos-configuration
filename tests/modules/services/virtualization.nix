@@ -4,7 +4,7 @@ let
   harness = import ../../support/eval-host.nix;
   mkSys = isDev: harness.evalHost [
     ../../../modules/host
-    ../../../modules/base/users.nix
+    (harness.nixosModuleFrom ../../../modules/base/users.nix "users")
     ../../../modules/services/virtualization.nix
     { custom.host.isDev = isDev; }
   ];

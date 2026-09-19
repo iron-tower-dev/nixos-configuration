@@ -4,7 +4,7 @@ let
   harness = import ../../support/eval-host.nix;
   sys = harness.evalHost [
     harness.inputs.impermanence.nixosModules.impermanence
-    ../../../modules/base/users.nix
+    (harness.nixosModuleFrom ../../../modules/base/users.nix "users")
     ../../../modules/services/impermanence.nix
   ];
   cfg = sys.config;

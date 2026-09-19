@@ -2,7 +2,7 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-host.nix;
-  sys = harness.evalHost [ ../../../modules/base/bluetooth.nix ];
+  sys = harness.evalHost [ (harness.nixosModuleFrom ../../../modules/base/bluetooth.nix "bluetooth") ];
   cfg = sys.config;
 in
 lib.runTests {

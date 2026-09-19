@@ -2,7 +2,7 @@
 { lib ? (import <nixpkgs> { }).lib }:
 let
   harness = import ../../support/eval-host.nix;
-  sys = harness.evalHost [ ../../../modules/base/audio.nix ];
+  sys = harness.evalHost [ (harness.nixosModuleFrom ../../../modules/base/audio.nix "audio") ];
   cfg = sys.config;
 in
 lib.runTests {
