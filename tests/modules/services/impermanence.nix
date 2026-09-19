@@ -5,14 +5,14 @@ let
   sys = harness.evalHost [
     harness.inputs.impermanence.nixosModules.impermanence
     (harness.nixosModuleFrom ../../../modules/base/users.nix "users")
-    ../../../modules/services/impermanence.nix
+    (harness.nixosModuleFrom ../../../modules/services/impermanence.nix "impermanence")
   ];
   cfg = sys.config;
   hasUserDir = path: dirs: builtins.any (d: d.directory == path) dirs;
 
   sysExtended = harness.evalHost [
     harness.inputs.impermanence.nixosModules.impermanence
-    ../../../modules/services/impermanence.nix
+    (harness.nixosModuleFrom ../../../modules/services/impermanence.nix "impermanence")
     { custom.services.impermanence.directories = [ "/home/ds/Documents" ]; }
   ];
 

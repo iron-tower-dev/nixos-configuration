@@ -5,7 +5,7 @@ let
   mkSys = isDev: harness.evalHost [
     ../../../modules/host
     (harness.nixosModuleFrom ../../../modules/base/users.nix "users")
-    ../../../modules/services/virtualization.nix
+    (harness.nixosModuleFrom ../../../modules/services/virtualization.nix "virtualization")
     { custom.host.isDev = isDev; }
   ];
   dev = (mkSys true).config;

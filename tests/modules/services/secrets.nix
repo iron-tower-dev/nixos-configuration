@@ -4,7 +4,7 @@ let
   harness = import ../../support/eval-host.nix;
   sys = harness.evalHost [
     harness.inputs.sops-nix.nixosModules.sops
-    ../../../modules/services/secrets.nix
+    (harness.nixosModuleFrom ../../../modules/services/secrets.nix "secrets")
   ];
   cfg = sys.config;
 in

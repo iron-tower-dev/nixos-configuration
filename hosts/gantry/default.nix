@@ -22,10 +22,10 @@ in
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/login.nix
     ../../modules/desktop/comms.nix
-    ../../modules/services/virtualization.nix
-    ../../modules/services/containers.nix
-    ../../modules/services/impermanence.nix
-    ../../modules/services/secrets.nix
+    self.nixosModules.virtualization
+    self.nixosModules.containers
+    self.nixosModules.impermanence
+    self.nixosModules.secrets
 
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
